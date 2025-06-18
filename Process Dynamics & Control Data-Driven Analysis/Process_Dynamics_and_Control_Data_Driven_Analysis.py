@@ -82,7 +82,7 @@ def custom_constant_fit(x,y):
     return np.mean(y)
 def custom_curve_fit_logistic(x_data, y_data, p0=None):
     """A simplified logistic curve returns initial guesses."""
-    #Filter out NaNa from input data to ensure valid calculations
+    #Filter out NaN from input data to ensure valid calculations
     valid_indices =~(np.isnan(x_data) | np.isnan(y_data))
     x_data = x_data[valid_indices]
     y_data = y_data[valid_indices]
@@ -477,7 +477,7 @@ def simulate_tank_drain(dt, solver_func):
     #an initial guess for max time to ensure coverage, then trim.
     #a safe upper bound for drain time is (2/k)*sqrt(h0) for h=1, which is approx 14.4s
     #lets set a tSpan that is long enough, for example, 20s
-    max_sim_time=analytical_drain_time(h0, 0.0, k) *2   #twice the to,e tp drain to 0 or (or a very small value close to 0)
+    max_sim_time=analytical_drain_time(h0, 0.0, k) *2   #twice the time tp drain to 0 or (or a very small value close to 0)
     tSpan =[0,max_sim_time] #sufficiently large time span
     #use the chosen solver from eng1014.py
     # #Note: heun/midpount function returns t,y where y is dependent variabke(h here)
@@ -587,3 +587,284 @@ plt.show()
 
 print("\nQ4(e): ")
 print("The log-log plot now should show error ~ O(dt^2), indicating second-order convergance for Heun's method. ")
+
+
+"""ENG1014 ASSIGNMENT – S1 2025 
+pH neutralisation 
+Due: 11:55 pm, Friday, Week 11 (23rd May) 
+Late submissions: As per the Monash Marking and Feedback Procedure, a 5% penalty (-0.5 marks) per 
+day, or part thereof, will be applied. Tasks submitted more than seven days after the due date without 
+special consideration will not be marked.
+Guidelines
+This assignment is to be completed INDIVIDUALLY. Students are advised to review Monash University's
+policies on academic integrity, plagiarism and collusion. Plagiarism occurs when you fail to acknowledge 
+that the ideas or work of others are being used. Collusion occurs when you work in a manner not 
+authorised by the teaching staff. Do not share your code with others. You may (and should) discuss general 
+ideas and algorithms with your peers but the approach to coding must be your own. You must have a full 
+understanding of it and be able to explain it during the interview session. All assignments will be 
+checked using plagiarism and collusion detection software. In the event of suspected misconduct, the 
+case will be reported to the Chief Examiner and the student's unit total may be withheld until the case has 
+been decided. 
+Instructions
+Download the assignment materials from Moodle. Use the given template file ENG1014_Assignment.py
+and modify the code within the template file. Stick to the template. Answer all questions as required. 
+Check your solutions by running ENG1014_Assignment.py and ensuring the outputs for all questions are 
+appropriately generated. The variables must be available in the pane after running the script, i.e. all output 
+variables must be unique so that your demonstrator can examine them. 
+This assignment assesses your ability to apply concepts taught in ENG1014. Coding is in many ways a 
+creative pursuit, but to ensure that you can justify and explain your code and how it works, we strongly 
+advise you to use functions and methods that you have learned in this unit. Therefore, you should NOT
+use any external libraries, modules, or functions beyond those included in the ENG1014 coding 
+environment, as specified in the beginning of the semester.
+Submitting your assignment
+Compress all required files into a single ZIP file to submit your assignment via Moodle. Name your ZIP file
+as Assignment_ID, replacing ID with your student ID (e.g. Assigment_12345678.zip). Your ZIP file must 
+include the following attachments: 
+1. Your ENG1014_Assignment.py file containing all assignment tasks.
+2. ALL additional files required by your .py file (including the data files, the ENG1014 module, and any other 
+supplementary files you have written).
+Your assignment will be assessed physically in Week 12. You are required to book a slot for the physical
+interview session. Details about the slot booking will be sent out separately via Moodle Announcement. 
+You must attend and be present for the assessment to be marked. You will receive a score of 0 if 
+you do not attend an interview session. Your ZIP file will be downloaded from Moodle and only these 
+files will be marked. Your demonstrator will extract (unzip) your submitted ZIP file and mark you based on 
+the output of ENG1014_Assignment.py and your verbal explanations.
+It is your responsibility to ensure that everything needed to run your solution is included in your 
+ZIP file.
+Marking Approach
+This assignment is worth 10% of the unit mark. Your assignment will be graded using the following criteria: 
+1. ENG1014_Assignment.py produces results automatically (additional user interaction
+only if asked explicitly).
+2. Your code produces correct results (printed values, plots, etc…) and is well written.
+3. Poor programming practice (see table below) may result in a loss of up to 20%
+4. Your ability to answer the demonstrator's questions in the Week 12 interview is where we test your 
+understanding of the assignment questions and the submitted code. You may receive marks for correct 
+explanations, even if your code is incorrect (and vice versa).
+Hints
+1. You may use any scripts that you have written in the labs and workshops. 
+2. The tasks have been split into sub-questions. It is important to understand how each sub-question 
+contributes to the whole, but each sub-question is effectively a stand-alone task that is part of the 
+problem. Each can be tackled individually. 
+3. It is recommended that you break down each sub-question into smaller parts too and figure out what 
+needs to be done step-by-step. Then you put things together to complete the whole task or question. 
+4. Attempt to solve the question or plan your algorithm by hand before attempting to code the solution.
+Assignment Help
+1. You can discuss the assignment with the unit coordinator (Dr. Lim) and your lab demonstrator (Ms. Teoh), 
+however be aware that we will only answer general questions related to theory (e.g. “How can I 
+determine if my step size is small enough when I’m solving an ODE?”) and not specific questions (e.g. “I’m 
+stuck on question 3, how can I approach this?”).
+Academic Integrity Expectations
+1. You may discuss general ideas and approaches with peers. 
+2. However, you should NOT write your code with a peer, nor share your code or sections of code directly 
+with other students as this may constitute collusion.
+3. AI & Generative AI tools MUST NOT BE USED within this assessment / task for the following 
+reasons: This whole assessment task requires students to demonstrate human knowledge and 
+skill acquisition without the assistance of AI.
+Poor Programming Practices (PPP)
+The table below summarises the criteria to avoid PPP deduction. A maximum deduction of 20% of the total 
+assignment mark is applicable for PPP. Marks are deducted based on whether the criteria for each 
+category is met. Remember to read the instructions carefully.
+Category Criteria
+1
+Submission
+a. Appropriate naming for the .py and .zip file submission
+b. Include all supplementary files in submission
+2
+Documentation
+a. Name, ID, Date on the submission
+b. Communicate the answers for each question via either a plot or print statement
+c. Include comments that briefly outline your code
+d. Include a docstring for all user-defined functions
+3
+Coding
+a. Use appropriate variable names
+b. No overwriting of variable names
+c. No hardcoding
+d. Use efficient coding
+4
+Graphs
+a. Include appropriate graph titles
+b. Label x and y axes, including units where possible
+c. Use appropriate and legible coloured lines and markers
+d. Include a legend when there is more than one array plotted, including units where possible
+ASSIGNMENT BRIEF 
+Background
+At the SAMPLE labs at Monash University, a wide range of research and teaching activities generate 
+laboratory wastewater containing acids, bases, and chemical residues. To ensure compliance with 
+environmental regulations and protect municipal drainage infrastructure, we use a pH neutralisation 
+system to treat this wastewater before discharge.
+Our pH neutralisation system continuously monitors the pH of incoming wastewater and automatically 
+adjusts it using acid or base dosing to maintain a neutral range suitable for safe disposal. This ensures 
+that effluent leaving the lab meets regulatory standards and minimises environmental impact. The system 
+provides real-time data on inlet and outlet pH, offering valuable insights into the neutralisation process 
+performance and chemical consumption. 
+This assignment will use data from the pH neutralisation system as a case study to apply key numerical 
+methods in engineering. The analysis will involve:
+● Root Finding: Determining steady-state conditions or identifying critical points in pH response.
+● Numerical Integration: Estimating total acid/base consumption over time or cumulative changes in 
+pH.
+● Ordinary Differential Equations (ODEs): Modelling the dynamic behaviour of the neutralisation 
+process, including reaction kinetics and control system response.
+Through these methods, students will gain practical experience in applying computational techniques to 
+a real-world engineering system.
+The SAMPLE pH Neutralisation System
+Our system consists of four main components, shown in Figure 1.
+1. Instrumentation for monitoring, controlling, and recording, including pH and ORP electrodes
+2. Effluent holding tank
+3. Chemical reagent storage tanks and addition pumps
+4. Agitator(s)
+The system automatically collects three data points in one-minute increments:
+1. Inlet pH
+2. Outlet pH
+3. Outlet Flowrate [L/min]
+System data for the month of September 2024 has been provided in the file 
+“pH_neutralisation_Sept.csv”. 
+Experimental lab data for the neutralisation of a strong base with a strong acid has been provided in the 
+file “strong_acid_strong_base.csv”.
+Figure 1: process flow diagram (PFD) of the SAMPLE pH neutralisation system
+Assignment Objectives
+In this assignment, you will apply core numerical methods in engineering—data cleaning, numerical 
+integration, root finding, and ODE solving—to a real-world system: a pH neutralisation process used in 
+laboratory wastewater treatment.
+Working with real process data, you will simulate how engineers monitor and control chemical dosing to 
+ensure safe, compliant effluent discharge. Throughout the assignment, you will work with actual process 
+data, simulating how engineers monitor and control chemical dosing to maintain environmental 
+compliance. Each question provides a different perspective on the system:
+● Understanding sensor behaviour and flow conditions (Q1)
+● Estimating cumulative chemical use and cost via integration (Q2)
+● Modelling titration response curves for controller design (Q3)
+● Predicting tank drain times using ODEs and assessing solution accuracy (Q4)
+The assignment offers a practical taste of how numerical tools help engineers interpret data, make 
+predictions, and support system design in real engineering contexts.
+Q1. Data inspection and preparation
+The dataset “pH_neutralisation_(Sept).csv” contains data from the pH neutralisation system for the 
+month of September.
+Sometimes a sensor isn't set up (calibrated) correctly, and this causes it to give wrong readings. In our 
+case, the flowrate sensor shows some negative values, which don’t make physical sense because flowrate 
+can’t be negative. This happens because of something called sensor offset. That means all the readings 
+are shifted by a fixed amount. So even when the real flowrate is zero, the sensor shows a small negative 
+number. To figure out how much the sensor is off, we look at all the negative flowrate values and find the 
+most common one (this is called the mode). The mode is the sensor offset. Once we know the offset, we 
+can fix the data by minus the mode from all the flowrate readings to get the true values, essentially 
+increasing all the sensor readings to correct values.
+(a) Identify all negative flowrate values and round the values to two decimal places. Determine the 
+flowrate offset by creating a histogram on Figure (1) that shows the frequency of all rounded negative 
+flowrate values. Apply this offset correction to all original flowrate values. Set any corrected flowrate values 
+that are still below a threshold of 0.001 L/min to exactly zero (they represent non-flowing moments). Print 
+the flowrate offset and number of zero flowrate values after correction to the console.
+(b) On Figure (2), create a 3x1 subplot. In the first subfigure, plot the inlet pH and outlet pH as markers. 
+In the second, plot the pH difference = outlet pH - inlet pH as markers. On the third, plot the cleaned outlet 
+flowrate data from Q1(a). All three subfigures should be plotted against the date on the x-axis. 
+Hint: If you cannot complete a task easily with the contents of the modules we have covered explicitly in ENG1014, 
+remember that you are allowed to use any modules included in the standard Python installation. For example, 
+there are components in modules that we haven’t discussed that can help you format time series plots.
+Hint: Ensure that your code runs in a reasonable amount of time. If it seems to be taking a long time to run on
+your machine, please consider a different solution to that task, even if it means you don’t get exactly the required
+outputs. If we can’t run the code in a reasonable amount of time, we can’t mark it!
+(c) We are interested in periods when the system is operating, defined as when the outlet flowrate is 
+greater than 0, or adjusting, defined as when the absolute difference between outlet pH and inlet pH is 
+greater than 0.5. Using your cleaned data from Q1(a), determine the total number of minutes when the 
+system is operating and the total number of minutes when the system is adjusting. Print the total 
+operating and adjusting times to the console.
+Q2. Integration
+pH is a way to describe how acidic or basic a solution is. A low pH means it's acidic (lots of H+ ions), and a 
+high pH means it's basic (few H+ ions). 
+To estimate how much acid or base is used in the neutralisation system over time, we can combine the 
+outflow rate from the neutralisation system (how much treated water is leaving), and a dosing formula 
+that tells us how much acid or base is needed based on how far the pH is from neutral. The system adds 
+a strong acid when the pH is too high, and a strong base when the pH is too low, to bring the outlet pH 
+into the target range of between 6-8.
+Therefore, the system:
+● Adds acid if inlet pH is above 8
+● Adds base if inlet pH is below 6
+● Does not dose if inlet pH is already between 6–8
+The chemical dose rate is based on the relationship between pH and hydrogen ion concentration [H+], 
+where:
+[𝐻+] = 10−𝑝𝐻 Eq. 1
+Therefore, the difference between the target and inlet hydrogen ion concentration, in mol/L, at any time, 
+t is:
+𝛥[𝐻 +](𝑡) = |10−𝑝𝐻𝑡𝑎𝑟𝑔𝑒𝑡 − 10−𝑝𝐻𝑖𝑛𝑙𝑒𝑡| Eq. 2
+The required chemical dosing mass flowrate R(t) in g/min can be estimated by:
+𝑅(𝑡) = 𝑄(𝑡) ⋅ 𝛥[𝐻 +](𝑡) ∙ 𝑀𝑊 Eq. 3
+Where: 
+● Q(t) is the outlet flowrate in L/min; 
+● ∆[H+](t) is the difference between the target and inlet H+ concentration, which determines the 
+acid or base addition required (Eq. 2).
+● MW is the molecular weight of the acid or base, i.e. 36.5 g/mol for HCl (acid) or 40.0 g/mol for 
+NaOH (base), respectively.
+(a) Use your cleaned data from Question 1. Write a Python script that calculates the required dosing 
+mass flowrate R(t) in g/min at each time point, based on the inlet pH and a fixed target pH of 7. Make sure 
+no dosing occurs at pH between 6-8. Use your script to create an array of dosing mass flowrates and plot 
+the resulting values against date on Figure (3).
+(b) Use a method you have learned in ENG1014 to numerically integrate R(t) to determine the total 
+amount of chemical added (in grams) over the entire month. Print the final result to the console.
+(c) The lab pays for neutralising chemicals based on how much is used per day:
+● For daily chemical use ≤ 500 mg, the cost is $0.02 per mg.
+● For use > 500 mg, the cost is $0.02 per mg for the first 500 mg, and $0.015 per mg thereafter.
+Calculate the total cost for the month using the tiered pricing scheme above. Print the final cost to the
+console.
+Q3. Curve Fitting and Root Finding
+Accurately modelling the pH response of a neutralisation process is essential for tuning the control system 
+that regulates chemical dosing. A well-fitted model allows us to predict how much acid or base needs to 
+be added to reach a target pH, helping the system respond efficiently to varying inlet conditions. 
+The dataset “strong_acid_strong_base.csv” contains a pH curve from a neutralisation process where a 
+strong acid was added to a strongly basic effluent in the neutralisation tank. This dataset represents the 
+measured pH of the solution as a function of the volume of base added in a laboratory titration 
+experiment. The experimental pH data is typical, and exhibits three regions:
+1. A slow increase (buffering region, below 22.50 mL)
+2. A sharp rise (equivalence point region, 22.50 - 27.50 mL)
+3. A plateau (post-neutralisation, above 27.50 mL)
+(a) Using the curve fitting models that you have learned in ENG1014, create a piecewise model for each 
+region for the pH curve between pH 2.1 and pH 13.5. Determine the parameters for each piecewise model. 
+Plot your piecewise models and the original data together on Figure (4). Use different colours to clearly 
+indicate the region of your fitted piecewise models. Provide justification of your model fittings by printing
+comments (1-3 sentences) to the console.
+(b) Create a function that accepts one or multiple values for volume of base added (mL), and/or other 
+necessary parameters. The function should return the estimated pH between 2.1 and 13.5, calculated
+using your piecewise models from Question 3(a). Use if-elif-else structures with logical conditions to apply 
+the appropriate piecewise model to each volume. Print the predicted pH by your piecewise models for 
+four dosing volume values of 22, 24, 26, and 28 mL, to the console.
+(c) Use a numerical root-finding method to determine the volume of base required to reach neutral pH 
+(pH = 7.0) based on your piecewise model. Print the volume of base added at pH = 7.0 and the 
+corresponding pH value from your model to the console. Plot and label this point on Figure (4) as a red
+circle.
+Q4. ODEs
+At the end of each month, the effluent holding tank in the pH neutralisation system must be emptied 
+safely to allow for regular cleaning and maintenance. This is done by opening a drain valve at the bottom 
+of the tank. Modelling the tank draining behaviour, i.e. the drain time of the tank, is useful for maintenance 
+staff to plan their activities accordingly.
+The flow rate through the valve at the tank outlet is governed by Torricelli’s Law: 
+𝑑ℎ
+𝑑𝑡
+= −𝑘√ℎ Eq. 4
+Where:
+● h(t) = height of the fluid in the tank at time t [m]
+● k = valve constant, based on the valve size and fluid properties [√𝑚/𝑠]
+● t = time [s]
+(a) Implement Euler’s method to solve the differential equation above, assuming the tank starts full with 
+a liquid height of 1.0 m. Use a constant 𝑘 = 0.15 √𝑚/𝑠, and simulate the system until the height of the 
+liquid drops below 0.01 m. Use time steps of 0.1 s for this initial simulation. Print the total time required 
+to reduce the height of liquid in the tank to 0.01 m or less to the console.
+(b) To investigate how the choice of time step affects the simulation, repeat Q4(a) using two additional 
+time steps: 0.5 s and 1.0 s. Plot all three curves on a single graph in Figure (5) using different colours for 
+each. Print the final drain time for each step size and a brief (1–2 sentences) summary of how the shape 
+and accuracy of the solution changes as the step size changes to the console.
+(c) The analytical solution to the ODE predicts the exact theoretical time required to drain the tank from 
+an initial height to a final height. The relationship is:
+𝑡𝑑𝑟𝑎𝑖𝑛 =
+2
+𝑘
+(√ℎ0 − √ℎ) Eq. 5
+Use this expression to calculate the theoretical drain time from 1.0 m to 0.01 m. Compare this value to the 
+numerical results you obtained in Q4(b), and compute the percentage error for each time step. Print the 
+theoretical drain time, all numerical drain times, and their corresponding percentage errors to the console.
+(d) Write a script that uses a while loop to iteratively reduce the time step size (dt) and re-solve the ODE 
+from Q4(a). Start from dt = 0.1 and halve the step size in each iteration (e.g., 0.1, 0.05, 0.025, ...). At each 
+step, compare the numerical drain time to the analytical result from part (c). Continue looping until the 
+percentage error between the numerical and analytical drain times is less than 0.1%. Print the maximum
+step size required to achieve this accuracy, along with the final numerical drain time and corresponding 
+percentage error.
+(e) Using your results from Q4(d), create a log-log plot of percentage error versus time step size on Figure 
+(6). Based on the slope of the log-log plot, print a short comment (1-2 sentences) to the console explaining 
+how the gradient of the log-log plot reflects the error behaviour of Euler’s method.
+End of Assignment"""
