@@ -1,77 +1,115 @@
-# **Fourier Series Decomposition Visualization**
+# Fourier Series Decomposition Visualization
 
-This repository contains a Python script (`Fourier_Series_Decomposition.py`) that animates the decomposition of a square wave into a sum of its harmonic components. This visualization aims to demonstrate the fundamental concept of Fourier analysis and its power in representing periodic signals.
+This repository contains a Python script that **animates the decomposition of a square wave** into a sum of its harmonic sine components. The project provides a visual and intuitive understanding of how the Fourier series works to approximate periodic signals.
 
-## **Project Overview**
+---
 
-The core idea of Fourier series is that any periodic function can be represented as an infinite sum of sine and cosine functions. This project visually illustrates this by starting with a simple approximation and progressively adding more harmonic terms to show how the sum converges to the original function.
+## 📌 Project Overview
 
-### **Visualized Concept:**
+The **Fourier series** allows any periodic function to be represented as a sum of sine and cosine functions. In this project:
 
-* **Fourier Series Approximation**: The animation focuses specifically on a **square wave**, showing how its smooth sine wave components are summed together. As more higher-order harmonic terms are included, the approximation gets increasingly accurate, demonstrating the convergence of the Fourier series. The **Gibbs phenomenon** (overshoots at discontinuities) is also naturally visible at the edges of the square wave.
+- A **square wave** is approximated using its Fourier series.
+- Higher-order harmonics are added one by one to show convergence.
+- The **Gibbs phenomenon** (overshoot near discontinuities) is clearly observed.
 
-## **Features**
+---
 
-* **Interactive Animation**: A dynamic plot that animates the build-up of the Fourier series approximation.
-* **Clear Convergence**: Visually demonstrates how adding more harmonic terms improves the approximation of the original function.
-* **Animation Saving**: The script automatically attempts to save the generated animation as a **GIF (`.gif`)** or **MP4 (`.mp4`)** file in the same directory as the script.
-* **Configurable Parameters**: Adjust the maximum number of harmonic terms and animation speed directly in the script.
+## 🎞️ Features
 
-## **How to Run**
+- 🎥 **Animated Visualization**: Displays the construction of a square wave from sine wave components.
+- 🔁 **Progressive Approximation**: Watch how accuracy improves with more harmonics.
+- 💾 **Auto Save**: Animation is saved as `.gif` or `.mp4` in the same directory.
+- ⚙️ **Easily Customizable**: Tweak the number of harmonics, animation speed, and wave period.
 
-To run this visualization, you'll need Python installed on your system along with a few common scientific computing libraries and an external tool for saving animations.
+---
 
-### **Prerequisites**
+## 🛠️ How to Run
 
-* Python 3.x
-* `matplotlib`
-* `numpy`
-* **For saving animations (one of these is usually sufficient):**
-    * **ImageMagick:** (Recommended for GIF output). Ensure it's installed and in your system's PATH.
-    * **FFmpeg:** (Recommended for MP4 output). Ensure it's installed and in your system's PATH.
-    * *(If neither is found, `matplotlib` will attempt to use `Pillow` for GIF saving, which is often installed with `matplotlib`.)*
+### ✅ Prerequisites
 
-### **Installation**
+- **Python 3.x**
+- **Python packages**:
+  - `numpy`
+  - `matplotlib`
 
-1.  **Install the required Python libraries:**
-    ```bash
-    pip install matplotlib numpy
-    ```
-2.  **Install an animation writer (if you don't have them):**
-    * **For ImageMagick (GIFs):** Download from [imagemagick.org](https://imagemagick.org/) (ensure it's added to PATH during Windows install).
-    * **For FFmpeg (MP4s):** Download from [ffmpeg.org](https://ffmpeg.org/) (ensure it's added to PATH).
-    * *On macOS (with Homebrew):* `brew install imagemagick ffmpeg`
-    * *On Linux (Debian/Ubuntu):* `sudo apt-get install imagemagick ffmpeg`
+- **Optional (for saving animations)**:
+  - `ImageMagick` (GIF support)
+  - `FFmpeg` (MP4 support)
+  - Or fallback: `Pillow` (usually installed with `matplotlib`)
 
-### **Execution**
+### 📦 Installation
 
-To run the animation, execute the Python script from your terminal within the script's directory:
+Install Python packages:
 
 ```bash
+pip install matplotlib numpy
+Install an animation writer (if needed):
+
+Windows:
+Download ImageMagick
+
+Download FFmpeg
+
+Make sure they are added to your system PATH.
+
+macOS (with Homebrew):
+bash
+Copy
+Edit
+brew install imagemagick ffmpeg
+Ubuntu/Debian:
+bash
+Copy
+Edit
+sudo apt-get install imagemagick ffmpeg
+▶️ Run the Script
+Run the script from the terminal:
+
+bash
+Copy
+Edit
 python Fourier_Series_Decomposition.py
-A new window will appear displaying the animated Fourier series decomposition. The script will also attempt to save the animation as fourier_square_wave.gif (or .mp4) in the same folder. Check your terminal output for messages regarding saving success or errors.
+A plot window will appear with the animation.
 
-Project Structure
-Fourier_Series_Decomposition.py: The main Python script containing the animation logic and Fourier series calculation for a square wave.
-README.md: This file.
-fourier_square_wave.gif (or .mp4): The generated animation file (after running the script).
-Customization
-You can modify the following variables at the top of the Fourier_Series_Decomposition.py script to experiment with the visualization:
+The script saves the animation as fourier_square_wave.gif or fourier_square_wave.mp4.
 
-MAX_HARMONIC_TERMS: Control the maximum number of odd harmonic terms included in the approximation.
-ANIMATION_FRAMES: Set the number of frames for the animation, which affects its speed and smoothness.
-PERIOD and L_HALF_PERIOD: Adjust the period of the square wave.
-Note: If you wish to visualize a different periodic function, you will need to:
+📁 Project Structure
+bash
+Copy
+Edit
+Fourier_Series_Decomposition/
+├── Fourier_Series_Decomposition.py    # Main animation script
+├── README.md                          # This file
+└── fourier_square_wave.gif / .mp4     # Output animation after running
+⚙️ Customization
+You can edit the following variables at the top of Fourier_Series_Decomposition.py:
 
-Define a new function similar to square_wave.
-Crucially, update the fourier_series_square_wave function (or create a new fourier_series_your_function) to calculate the correct Fourier coefficients (a_0, a_n, b_n) for your new function, as these coefficients are specific to each function.
-Contributing
-Feel free to fork this repository, open issues, or submit pull requests. Contributions to add new functions, improve the animation, or enhance the code are highly welcome!
+Variable	Description
+MAX_HARMONIC_TERMS	Number of harmonics (odd terms only)
+ANIMATION_FRAMES	Frame count (controls animation speed/smoothness)
+PERIOD / L_HALF_PERIOD	Period of the square wave
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details (you might want to add a LICENSE file if you don't have one).
+To visualize other periodic functions:
+Define a new waveform function (e.g., triangle_wave, sawtooth_wave, etc.)
 
-Credits
-Developed by Irfana (irfanaaslam69@gmail.com)
-Inspired by the elegant mathematics of Fourier analysis.
-<!-- end list -->
+Write a corresponding Fourier series function to compute its coefficients (a₀, aₙ, bₙ)
+
+🤝 Contributing
+Contributions are welcome!
+
+Add support for new waveforms
+
+Improve animation features
+
+Optimize performance
+
+Feel free to fork the repo and open a pull request.
+
+📄 License
+This project is licensed under the MIT License.
+See the LICENSE file for details.
+
+👩‍💻 Credits
+Developed by Irfana
+📧 irfanaaslam69@gmail.com
+Inspired by the beauty and utility of Fourier analysis in signal processing.
